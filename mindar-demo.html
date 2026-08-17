@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mind-AR Marker-to-World Demo | ARCubo</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <script>
+      AFRAME.registerComponent('detach-on-target', {
+        init: function () {
+          const el = this.el;
+          const target = document.querySelector('#mytarget');
+          let isDetached = false;
+
+          target.addEventListener("targetFound", () => {
+            if (isDetached) return; // Jalankan sekali saja
+
+            // 1. Dapatkan posisi & rotasi global objek saat ini
+            const worldPos = new THREE.Vector3();
+            const worldQuat = new THREE.Quaternion();
+            const worldScale = new THREE.Vector3();
+
+            el.object3D.getWorldPosition(worldPos);
+            el.object3D.getWorldQuaternion(worldQuat);
+            el.object3D.getWorldScale(worldScale);
+
+            // 2. Pindahkan objek dari elemen Target ke elemen Scene
+            const sceneEl = el.sceneEl;
+            sceneEl.object3D.add(el.object3D);
+
+            // 3. Terapkan kembali transformasi dunia nyata
+            el.object3D.position.copy(worldPos);
+            el.object3D.quaternion.copy(worldQuat);
+            el.object3D.scale.copy(worldScale);
+
+            isDetached = true;
+            console.log("Objek berhasil dikunci di posisi dunia!");
+          });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <!-- Target Marker -->
+      <a-entity id="mytarget" mindar-image-target="targetIndex: 0">
+        <!-- Objek 3D dengan komponen detach-on-target -->
+        <a-gltf-model id="my-model" src="./model.glb" scale="0.5 0.5 0.5" detach-on-target></a-gltf-model>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
