@@ -9,6 +9,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialMessage =
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactMessage, setContactMessage] = useState(initialMessage);
+  const [emailError, setEmailError] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   useEffect(() => {
@@ -17,8 +18,20 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialMessage =
     }
   }, [initialMessage]);
 
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
+
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailError('');
+
+    if (!validateEmail(contactEmail)) {
+      setEmailError('Please enter a valid email address (e.g., name@domain.com).');
+      return;
+    }
+
     if (contactName && contactEmail && contactMessage) {
       setFormSubmitted(true);
       setTimeout(() => setFormSubmitted(false), 5000);
@@ -64,9 +77,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialMessage =
                   required
                   placeholder="e.g. liam@domain.com"
                   value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 px-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                  onChange={(e) => {
+                    setContactEmail(e.target.value);
+                    if (emailError) setEmailError('');
+                  }}
+                  className={`w-full bg-slate-950 border rounded-xl py-3 px-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-all ${
+                    emailError
+                      ? 'border-rose-500 focus:ring-1 focus:ring-rose-500'
+                      : 'border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500'
+                  }`}
                 />
+                {emailError && (
+                  <p className="mt-1 text-xs text-rose-400 font-medium">{emailError}</p>
+                )}
               </div>
             </div>
 

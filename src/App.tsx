@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { OverviewSection } from './components/OverviewSection';
 import { FeaturesSection } from './components/FeaturesSection';
+import { BackToTop } from './components/BackToTop';
 import { Footer } from './components/Footer';
 
 // Lazy loading heavy below-the-fold components
@@ -45,6 +46,7 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
