@@ -1,8 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, X, Boxes } from 'lucide-react';
+
+const NAV_ITEMS = [
+  { label: 'Overview', href: '#overview', id: 'overview' },
+  { label: 'Features', href: '#features', id: 'features' },
+  { label: 'Mind-AR Engine', href: '#mindar', id: 'mindar' },
+  { label: 'AR Simulator', href: '#simulator', id: 'simulator' },
+  { label: 'Specifications', href: '#specs', id: 'specs' },
+  { label: 'Pricing', href: '#pricing', id: 'pricing' },
+  { label: 'Contact', href: '#contact', id: 'contact' },
+];
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100;
+      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
+        const section = document.getElementById(NAV_ITEMS[i].id);
+        if (section) {
+          const top = section.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(NAV_ITEMS[i].id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 glassmorphism border-b border-slate-900">
@@ -24,13 +55,19 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#overview" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Overview</a>
-            <a href="#features" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Features</a>
-            <a href="#mindar" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Mind-AR Engine</a>
-            <a href="#simulator" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">AR Simulator</a>
-            <a href="#specs" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Specifications</a>
-            <a href="#pricing" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Pricing</a>
-            <a href="#contact" className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-200">Contact</a>
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`text-sm font-medium transition-colors duration-200 ${
+                  activeSection === item.id
+                    ? 'text-indigo-400 font-semibold border-b-2 border-indigo-500 pb-1'
+                    : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
 
           {/* Header CTA */}
@@ -63,55 +100,20 @@ export const Header: React.FC = () => {
       {mobileMenuOpen && (
         <div className="md:hidden glassmorphism border-b border-slate-900 transition-all duration-300 ease-in-out">
           <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3">
-            <a
-              href="#overview"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Overview
-            </a>
-            <a
-              href="#features"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Features
-            </a>
-            <a
-              href="#mindar"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Mind-AR Engine
-            </a>
-            <a
-              href="#simulator"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              AR Simulator
-            </a>
-            <a
-              href="#specs"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Specifications
-            </a>
-            <a
-              href="#pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Pricing
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-900"
-            >
-              Contact
-            </a>
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  activeSection === item.id
+                    ? 'text-indigo-400 bg-slate-900 font-semibold'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
             <div className="pt-4 pb-2 px-3">
               <a
                 href="#pricing"
