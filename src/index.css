@@ -19,6 +19,7 @@
   height: 160px;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
 }
 
 .cube-face {
@@ -44,15 +45,49 @@
 .cube-face-top    { transform: rotateX(90deg) translateZ(80px); }
 .cube-face-bottom { transform: rotateX(-90deg) translateZ(80px); }
 
-/* Continuous floating/rotating animation for fallback/idle */
-@keyframes slow-rotate {
-  0% { transform: rotateX(15deg) rotateY(45deg); }
-  50% { transform: rotateX(25deg) rotateY(225deg); }
-  100% { transform: rotateX(15deg) rotateY(405deg); }
+/* Custom clip-path for hologram beams */
+.clip-path-beam {
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
 }
 
-.cube-idle-animation {
-  animation: slow-rotate 15s infinite linear;
+/* Keyframe animations for GPU performance */
+@keyframes scan {
+  0%, 100% {
+    transform: translateY(-50px);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(50px);
+    opacity: 0.9;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -400;
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 20px;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
 }
 
 /* Glassmorphism utility */
