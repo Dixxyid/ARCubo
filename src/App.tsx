@@ -1,10 +1,49 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, Component, ErrorInfo, ReactNode } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { OverviewSection } from './components/OverviewSection';
 import { FeaturesSection } from './components/FeaturesSection';
 import { BackToTop } from './components/BackToTop';
 import { Footer } from './components/Footer';
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  public state: ErrorBoundaryState = {
+    hasError: false
+  };
+
+  public static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('Uncaught error in ARCubo module:', error, errorInfo);
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      return (
+        <div className="py-12 text-center text-slate-400 font-mono text-xs">
+          <p className="mb-2 text-rose-400 font-semibold">Unable to load interactive module.</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-all"
+          >
+            Reload Spatial Engine
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // Lazy loading heavy below-the-fold components
 const MindARSection = lazy(() => import('./components/MindARSection').then(m => ({ default: m.MindARSection })));
@@ -35,15 +74,17 @@ export default function App() {
         <HeroSection />
         <OverviewSection />
         <FeaturesSection />
-        <Suspense fallback={<SectionLoader />}>
-          <MindARSection />
-          <ARSimulatorSection />
-          <SpecificationsSection />
-          <PricingSection onSelectPlan={handleSelectPlan} />
-          <TestimonialsSection />
-          <TrustBadgesSection />
-          <ContactSection initialMessage={initialContactMessage} />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<SectionLoader />}>
+            <MindARSection />
+            <ARSimulatorSection />
+            <SpecificationsSection />
+            <PricingSection onSelectPlan={handleSelectPlan} />
+            <TestimonialsSection />
+            <TrustBadgesSection />
+            <ContactSection initialMessage={initialContactMessage} />
+          </Suspense>
+        </ErrorBoundary>
       </main>
       <Footer />
       <BackToTop />
