@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: './', // Relative base path ensures GitHub Pages handles the static asset resolution correctly
+  base: '/ARCubo/', // Explicit base path for GitHub Pages subpath deployment
   plugins: [react()],
   server: {
     port: 3000,
