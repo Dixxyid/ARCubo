@@ -1,4 +1,4 @@
-import{j as e}from"./index-CrTRf-jO.js";import{r,G as d,h as o,i as c,j as n,A as m,k as x,l as t}from"./icons-4mZYn4LO.js";import"./vendor-BYiT8gcn.js";const i=`<!DOCTYPE html>
+import{j as e}from"./index-CrCOS1g4.js";import{r,G as d,h as o,i as c,j as n,A as m,k as x,l as t}from"./icons-4mZYn4LO.js";import"./vendor-BYiT8gcn.js";const i=`<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
