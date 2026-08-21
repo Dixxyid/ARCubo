@@ -121,7 +121,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ initialMessage =
 
           {/* Toast confirmation for contact form */}
           {formSubmitted && (
-            <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium flex items-center gap-3 animate-pulse">
+            <div
+              role="status"
+              aria-live="polite"
+              className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-medium flex items-center gap-3 animate-pulse"
+            >
               <CheckCircle className="w-5 h-5 flex-shrink-0" />
               <div>
                 <span className="block font-bold">Message Received Successfully!</span>

@@ -269,6 +269,7 @@ export const ARSimulatorSection: React.FC = () => {
                         min="0"
                         max="360"
                         value={rotationY}
+                        aria-label="Yaw Rotation Angle"
                         onChange={(e) => setRotationY(Number(e.target.value))}
                         className="w-full accent-indigo-500 bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer"
                       />
@@ -283,6 +284,7 @@ export const ARSimulatorSection: React.FC = () => {
                         min="-45"
                         max="45"
                         value={rotationX}
+                        aria-label="Pitch Rotation Angle"
                         onChange={(e) => setRotationX(Number(e.target.value))}
                         className="w-full accent-indigo-500 bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer"
                       />
@@ -301,6 +303,7 @@ export const ARSimulatorSection: React.FC = () => {
                     min="20"
                     max="100"
                     value={projectionIntensity}
+                    aria-label="Projection Intensity Level"
                     onChange={(e) => setProjectionIntensity(Number(e.target.value))}
                     className="w-full accent-indigo-500 bg-slate-800 rounded-lg h-1.5 appearance-none cursor-pointer"
                   />
